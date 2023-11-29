@@ -9,7 +9,7 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh 'docker build -t vaishnavigi/devops .'
+        sh 'docker build -t vaishnavigi/Devops .'
       }
     }
     stage('Login') {
@@ -19,7 +19,7 @@ pipeline {
     }
     stage('Push') {
       steps {
-        sh 'docker push vaishnavigi/devops'
+        sh 'docker push vaishnavigi/Devops'
       }
     }
   }
