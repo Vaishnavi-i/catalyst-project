@@ -9,7 +9,7 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh 'docker build -t vaishnavigi/catalyst:latest'
+        sh 'docker build -t vaishnavigi/catalyst:latest .'
       }
     }
     stage('Login') {
