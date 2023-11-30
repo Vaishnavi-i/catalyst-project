@@ -26,13 +26,13 @@ pipeline {
             steps {
                 // Apply Kubernetes manifests using kubectl
                 script {
-                    def kubeconfig = '/etc/kubernetes/admin.conf’ // Path to your kubeconfig file
-                    //def namespace = ‘default’ // Kubernetes namespace
-                    def deploymentFile = '/etc/kubernetes/manifests/deployment.yaml’ // Path to your deployment YAML file
-                    def serviceFile = ‘/etc/kubernetes/manifests/service.yaml' // Path to your service YAML file
+                    def kubeconfig = '/etc/kubernetes/admin.conf' // Path to your kubeconfig file
+                    //def namespace = 'default' // Kubernetes namespace
+                    def deploymentFile = '/etc/kubernetes/manifests/deployment.yaml' // Path to your deployment YAML file
+                    def serviceFile = '/etc/kubernetes/manifests/service.yaml' // Path to your service YAML file
                     
-                    sh "kubectl --kubeconfig=kubectl apply -f deployment.yaml”
-                    sh "kubectl --kubeconfig=kubectlapply -f service.yaml”
+                    sh "kubectl --kubeconfig=kubectl apply -f deployment.yaml"
+                    sh "kubectl --kubeconfig=kubectlapply -f service.yaml"
                 }
             }
         }
