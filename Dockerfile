@@ -7,6 +7,6 @@ WORKDIR ./node/
 RUN apt-get update
 RUN apt-get install npm -y
 
-EXPOSE 8080
+EXPOSE 1337
 
 CMD node server.js
