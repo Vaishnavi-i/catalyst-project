@@ -7,7 +7,7 @@ pipeline {
     DOCKERHUB_CREDENTIALS = credentials('dockerhub')
   }
   stages {
-    '''stage('Build') {
+    stage('Build') {
       steps {
         sh 'docker build -t vaishnavigi/devops .'
       }
@@ -21,7 +21,7 @@ pipeline {
       steps {
         sh 'docker push vaishnavigi/devops'
       }
-    }'''
+    }
     stage('Deploy to Kubernetes') {
             steps {
                 // Apply Kubernetes manifests using kubectl
