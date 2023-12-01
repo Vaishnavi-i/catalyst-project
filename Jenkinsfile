@@ -31,8 +31,8 @@ pipeline {
                     def deploymentFile = '/etc/kubernetes/manifests/deployment.yaml' // Path to your deployment YAML file
                     def serviceFile = '/etc/kubernetes/manifests/service.yaml' // Path to your service YAML file
                     
-                    sh "sudo kubectl apply -f deploymentFile "
-                    sh "sudo kubectl apply -f serviceFile "  
+                    sh "kubectl apply -f deploymentFile "
+                    sh "kubectl apply -f serviceFile "  
                 }
             }
         }
