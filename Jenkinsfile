@@ -3,11 +3,11 @@ pipeline {
   options {
     buildDiscarder(logRotator(numToKeepStr: '5'))
   }
-  '''environment {
+  environment {
     DOCKERHUB_CREDENTIALS = credentials('dockerhub')
-  }'''
+  }
   stages {
-    '''stage('Build') {
+    stage('Build') {
       steps {
         sh 'docker build -t vaishnavigi/devops .'
       }
@@ -21,7 +21,7 @@ pipeline {
       steps {
         sh 'docker push vaishnavigi/devops'
       }
-    }'''
+    }
     stage('Deploy to Kubernetes') {
             steps {
                 // Apply Kubernetes manifests using kubectl
@@ -33,7 +33,7 @@ pipeline {
 
                      sh "kubectl apply -f /etc/kubernetes/manifests/service.yaml"
                      sh "kubectl apply -f ${deploymentFile}"
-                    sh "kubectl --kubeconfig=${kubeconfig} apply -f ${serviceFile}"
+                     //sh "kubectl --kubeconfig=${kubeconfig} apply -f ${serviceFile}"
                 }
             }
         }
