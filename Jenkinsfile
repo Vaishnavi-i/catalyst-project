@@ -3,9 +3,9 @@ pipeline {
   options {
     buildDiscarder(logRotator(numToKeepStr: '5'))
   }
- ''' environment {
+  environment {
     DOCKERHUB_CREDENTIALS = credentials('dockerhub')
-  }'''
+  }
   stages {
     '''stage('Build') {
       steps {
@@ -21,7 +21,7 @@ pipeline {
       steps {
         sh 'docker push vaishnavigi/devops'
       }
-    }'''
+    }
     stage('Deploy to Kubernetes') {
             steps {
                 // Apply Kubernetes manifests using kubectl
