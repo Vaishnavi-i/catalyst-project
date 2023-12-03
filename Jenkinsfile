@@ -26,7 +26,7 @@ pipeline {
         }
      stage('Push') {
             steps {
-                sh 'docker push vaishnavigi/devops'
+                sh 'docker push vaishnavigi/cat'
            }
          }
    
