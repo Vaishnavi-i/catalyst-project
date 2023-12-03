@@ -2,7 +2,7 @@ pipeline {
      agent any
         environment {
         //once you sign up for Docker hub, use that user_id here
-        registry = "vaishnavigi/catalyst"
+        registry = "vaishnavigi/cat"
         //- update your credentials ID after creating credentials for connecting to Docker Hub
         registryCredential = 'dockerhub'
         dockerImage = ''
@@ -14,24 +14,21 @@ pipeline {
             }
         }
        
-        stage ('Build docker image') {
+     stage ('Build docker image') {
             steps {
-                script {
-                dockerImage = docker.build registry
-                }
+                sh 'docker build -t vaishnavigi/cat .'
             }
         }
-       
-         // Uploading Docker images into Docker Hub
-    stage('Upload Image') {
-     steps{   
-         script {
-            docker.withRegistry( '', registryCredential ) {
-            dockerImage.push()
-            }
+     stage('Login') {
+            steps {
+                sh 'echo dckr_pat_-kvmrmrn70zR48J1-1PbvCGrx4g | docker login -u vaishnavigi --password-stdin'
+           }
         }
-      }
-    }
+     stage('Push') {
+            steps {
+                sh 'docker push vaishnavigi/devops'
+           }
+         }
    
     stage ('K8S Deploy') {
         steps {
