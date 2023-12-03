@@ -1,46 +1,52 @@
 pipeline {
-  agent any
-  options {
-    buildDiscarder(logRotator(numToKeepStr: '5'))
-  }
-  environment {
-    DOCKERHUB_CREDENTIALS = credentials('dockerhub')
-  }
-  stages {
-    stage('Build') {
-      steps {
-        sh 'docker build -t vaishnavigi/devops .'
-      }
+     agent {
+         label 'jenkin_pipeline'
+     }
+        environment {
+        //once you sign up for Docker hub, use that user_id here
+        registry = "vaishnavigi/catalyst"
+        //- update your credentials ID after creating credentials for connecting to Docker Hub
+        registryCredential = 'dockerhub'
+        dockerImage = ''
     }
-    stage('Login') {
-      steps {
-        sh 'echo dckr_pat_-kvmrmrn70zR48J1-1PbvCGrx4g | docker login -u vaishnavigi --password-stdin'
-      }
-    }
-    stage('Push') {
-      steps {
-        sh 'docker push vaishnavigi/devops'
-      }
-    }
-    stage('Deploy to Kubernetes') {
+    stages {
+        stage ('checkout') {
             steps {
-                // Apply Kubernetes manifests using kubectl
+            checkout([$class: 'GitSCM', branches: [[name: 'main']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/Vaishnavi-i/catalyst-project']]])
+            }
+        }
+       
+        stage ('Build docker image') {
+            steps {
                 script {
-                    def kubeconfig = '$HOME/.kube/config' // Path to your kubeconfig file
-                    def namespace = 'default' // Kubernetes namespace
-                    def deploymentFile = '/etc/kubernetes/manifests/deployment.yaml' // Path to your deployment YAML file
-                    def serviceFile = '/etc/kubernetes/manifests/service.yaml' // Path to your service YAML file
-
-                     sh "kubectl apply -f /etc/kubernetes/manifests/service.yaml"
-                     sh "kubectl apply -f ${deploymentFile}"
-                     //sh "kubectl --kubeconfig=${kubeconfig} apply -f ${serviceFile}"
+                dockerImage = docker.build registry
                 }
             }
         }
-  }
-  post {
-    always {
-      sh 'docker logout'
+       
+         // Uploading Docker images into Docker Hub
+    stage('Upload Image') {
+     steps{   
+         script {
+            docker.withRegistry( '', registryCredential ) {
+            dockerImage.push()
+            }
+        }
+      }
     }
-  }
+   
+    stage ('K8S Deploy') {
+        steps {
+            script {
+                kubernetesDeploy(
+                    configs: 'deployment.yaml',
+                    kubeconfigId: 'k8s_cred',
+                    enableConfigSubstitution: true
+                    )           
+               
+            }
+        }
+    }
+  
+    }  
 }
