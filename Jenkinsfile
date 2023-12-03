@@ -30,18 +30,20 @@ pipeline {
            }
          }
    
-    stage ('K8S Deploy') {
-        steps {
-            script {
-                kubernetesDeploy(
-                    configs: 'deployment.yaml',
-                    kubeconfigId: 'k8s_cred',
-                    enableConfigSubstitution: true
-                    )           
-               
-            }
-        }
-    }
+    stage('Deploy to Kubernetes') {
+            environment {
+                KUBECONFIG = credentials('k8s_cred') // Kubernetes configuration stored as credentials
+                DEPLOYMENT_FILE = 'deployment.yaml' // Path to your deployment.yaml file
+            }
+            steps {
+                script {
+                    // Set kubeconfig for kubectl
+                    withCredentials([file(credentialsId: 'k8s_cred', variable: 'KUBECONFIG')]) {
+                        sh "kubectl --kubeconfig=$KUBECONFIG apply -f $DEPLOYMENT_FILE"
+                    }
+                }
+            }
+        }
   
     }  
 }
