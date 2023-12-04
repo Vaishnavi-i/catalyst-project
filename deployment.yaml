@@ -18,17 +18,5 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 5000
-#service type loadbalancer
-----
-apiVersion: v1
-kind: Service
-metadata:
-  name: catalyst-service
-spec:
-  selector:
-    app: my-app
-  ports:
-    - protocol: TCP
-      port: 5000
-      targetPort: 5000
-  type: LoadBalancer
+
+
