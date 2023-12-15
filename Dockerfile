@@ -1,4 +1,4 @@
-FROM artifactory-docker-registry.cto.veritas.com/httpd:latest
+FROM httpd:latest
 
 RUN mkdir node
 COPY . ./node
